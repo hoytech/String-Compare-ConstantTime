@@ -25,7 +25,7 @@ String::Compare::ConstantTime - Timing side-channel protected string compare
 
 This modules provides one function, C<equals> (not exported by default).
 
-You should pass this function two strings of the same length. It will return true if they are string-wise equal (like C<eq) and false otherwise. Unlike C<eq>, neither string's contents will affect the time it takes for this function to return.
+You should pass this function two strings of the same length. It will return true if they are string-wise equal (like C<eq>) and false otherwise. Unlike C<eq>, neither string's contents will affect the time it takes for this function to return.
 
 B<NOTE>: If the lengths of the strings are different, C<equals> will return false right away.
 
@@ -33,9 +33,9 @@ B<NOTE>: If the lengths of the strings are different, C<equals> will return fals
 
 =head1 TIMING SIDE-CHANNEL
 
-Some programs take different amounts of time to run depending on the input values provided to them (obviously). When untrusted parties control input to these programs they might be able to learn information you might otherwise not want them to know. This is called a "timing side-channel".
+Some programs take different amounts of time to run depending on the input values provided to them. When untrusted parties control input, they might be able to learn information you might otherwise not want them to know. This is called a "timing side-channel".
 
-Most routines that compare strings (like perl's C<eq> and C<cmp> and C's C<strcmp> and C<memcmp>) terminate as soon as they determine the strings won't match. This is good for performance but bad because it opens a timing side-channel. If one of the strings being compared is a secret and the other is provided by some untrusted party, it is often possible for this party to learn the secret using this timing side-channel.
+Most routines that compare strings (like perl's C<eq> and C<cmp> and C's C<strcmp> and C<memcmp>) start scanning from the start and terminate as soon as they determine the strings won't match. This is good for efficiency but bad because it opens a timing side-channel. If one of the strings being compared is a secret and the other is provided by some untrusted party, it is sometimes possible for this untrusted party to learn the secret using a timing side-channel.
 
 
 
@@ -43,23 +43,23 @@ Most routines that compare strings (like perl's C<eq> and C<cmp> and C's C<strcm
 
 HMACs are "Message Authentication Codes" built on top of cryptographic hashes. The HMAC algorithm produces digests that are included along with a message in order to verify that whoever created the message knows a particular secret password, and that this message hasn't been tampered with since.
 
-To verify a candidate digest included with a message, you re-compute the digest using the message and the secret password. If they are the same, then the candidate digest is good and the message has been authenticated.
+To verify a candidate digest included with a message, you re-compute the digest using the message and the secret password. If they are the same then the candidate digest is good and the message is considered authenticated.
 
-A very common side-channel attack against services that will verify unlimited numbers of messages automatically is to create a forged message, and then just send some random junk as the candidate digest. Continue sending this message and the junk digest, varying only the first character in the digest. Repeat several times. If you find a particular digest that takes a slightly longer time be rejected than the other digests, it is probably because this particular digest has the first character correct and the final string comparison done by the service is advancing one character further than the others.
+A very common side-channel attack against services that will verify unlimited numbers of messages automatically is to create a forged message, and then just send some random junk as the candidate digest. Continue sending this message and the junk digest, varying the first character in the digest. Repeat several times. If you find a particular digest that statistically takes a slightly longer time to be rejected than the other digests, it is probably because this particular digest has the first character correct.
 
-At this point, you keep this first character fixed and start varying the second character. Repeat until all the characters are solved or until the amount of remaining characters are so small you can brute force guess it. At this point, your candidate digest is considered valid and you have forged a message.
+At this point, you keep this first character fixed and start varying the second character. Repeat until all the characters are solved or until the amount of remaining possibilities are so small you can brute force it. At this point, your candidate digest is considered valid and you have forged a message.
 
 Note that this particular attack doesn't allow the attacker to recover the secret input key, but the attacker can still use the service itself to produce a valid digest for any message.
 
 
 
-=head1 LOCK-PICKING
+=head1 LOCK-PICKING ANALOGY
 
 Pin tumbler locks are susceptible to being picked in a similar way to an attacker predicting HMAC candidate digests via a timing side-channel.
 
-The most common way to pick cheap pin tumbler locks is to apply torque to the lock cylinder so that the pins are pressed against the cylinder. However, because of slight manufacturing discrepancies, one particular pin will be the widest by a slight margin and will actually be the only pin pressed against the cylinder. The attacker lifts this pin until the cylinder "gives" a little bit, indicating that this pin has been solved and the next widest pin is now the one being pressed against the cylinder. This process is repeated until all the pins are solved and the lock opens.
+The most common way to pick cheap pin tumbler locks is to apply torque to the lock cylinder so that the pins are pressed against the cylinder. However, because of slight manufacturing discrepancies one particular pin will be the widest by a slight margin and will actually be the only pin pressed against the cylinder. The attacker lifts this pin until the cylinder "gives" a little bit, indicating that this pin has been solved and the next widest pin is now the one being pressed against the cylinder. This process is repeated until all the pins are solved and the lock opens.
 
-Just like an attacker trying to solve HMAC digests can work on a character at a time until all the characters are solved, a lock picker can work on each pin in isolation. To protect against this, quality locks force an attacker to try all pins simultaneously just as secure HMAC verifiers force attackers to guess the entire digest on each attempt.
+Just like an attacker trying to solve HMAC digests can work on a character at a time, a lock picker can work on each pin in isolation. To protect against this, quality locks force an attacker to try all pins simultaneously just as secure HMAC verifiers force attackers to guess the entire digest on each attempt.
 
 
 
@@ -68,7 +68,7 @@ Just like an attacker trying to solve HMAC digests can work on a character at a 
 
 L<The String-Compare-ConstantTime github repo|https://github.com/hoytech/String-Compare-ConstantTime>
 
-L<Authen::Passphrase> has a good section on side-channel cryptanalysis as it pertains to password storage.
+L<Authen::Passphrase> has a good section on side-channel cryptanalysis such as it pertains to password storage.
 
 L<The famous TENEX password bug|http://www.meadhbh.org/services/passwords>
 
