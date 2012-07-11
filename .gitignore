@@ -1,0 +1,11 @@
+README
+Makefile
+Makefile.old
+MYMETA.*
+String-Compare-ConstantTime-*.tar.gz
+blib/
+pm_to_blib
+ConstantTime.bs
+ConstantTime.c
+ConstantTime.o
+MANIFEST.bak
