@@ -64,9 +64,9 @@ Most routines that compare strings (like perl's C<eq> and C<cmp> and C's C<strcm
 
 HMACs are "Message Authentication Codes" built on top of cryptographic hashes. The HMAC algorithm produces digests that are included along with a message in order to verify that whoever created the message knows a particular secret password, and that this message hasn't been tampered with since.
 
-To verify a candidate digest included with a message, you re-compute the digest using the message and the secret password. If they are the same then the candidate digest is good and the message is considered authenticated.
+To verify a candidate digest included with a message, you re-compute the digest using the message and the secret password. If this computed digest is is the same as the candidate digest then the message is considered authenticated.
 
-A very common side-channel attack against services that will verify unlimited numbers of messages automatically is to create a forged message, and then just send some random junk as the candidate digest. Continue sending this message and the junk digest, varying the first character in the digest. Repeat several times. If you find a particular digest that statistically takes a slightly longer time to be rejected than the other digests, it is probably because this particular digest has the first character correct.
+A very common side-channel attack against services that verify unlimited numbers of messages automatically is to create a forged message and then just send some random junk as the candidate digest. Continue sending this message and the junk digest, varying the first character in the digest. Repeat many times. If you find a particular digest that statistically takes a longer time to be rejected than the other digests, it is probably because this particular digest has the first character correct and the service's final string comparison is running a little longer.
 
 At this point, you keep this first character fixed and start varying the second character. Repeat until all the characters are solved or until the amount of remaining possibilities are so small you can brute force it. At this point, your candidate digest is considered valid and you have forged a message.
 
@@ -76,11 +76,11 @@ Note that this particular attack doesn't allow the attacker to recover the secre
 
 =head1 LOCK-PICKING ANALOGY
 
-Pin tumbler locks are susceptible to being picked in a similar way to an attacker predicting HMAC candidate digests via a timing side-channel.
+Pin tumbler locks are susceptible to being picked in a similar way to an attacker forging HMAC digests using a timing side-channel.
 
-The most common way to pick cheap pin tumbler locks is to apply torque to the lock cylinder so that the pins are pressed against the cylinder. However, because of slight manufacturing discrepancies one particular pin will be the widest by a slight margin and will actually be the only pin pressed against the cylinder. The attacker lifts this pin until the cylinder "gives" a little bit, indicating that this pin has been solved and the next widest pin is now the one being pressed against the cylinder. This process is repeated until all the pins are solved and the lock opens.
+The most common way to pick cheap pin tumbler locks is to apply torque to the lock cylinder so that the pins are pressed against the cylinder. However, because of slight manufacturing discrepancies one particular pin will be the widest by a slight margin and will actually be the only pin pressed against the cylinder (the cheaper the lock, the higher the manufacturing "tolerances"). The attacker lifts this pin until the cylinder gives a little bit, indicating that this pin has been solved and the next widest pin is now the one being pressed against the cylinder. This process is repeated until all the pins are solved and the lock opens.
 
-Just like an attacker trying to solve HMAC digests can work on a character at a time, a lock picker can work on each pin in isolation. To protect against this, quality locks force an attacker to try all pins simultaneously just as secure HMAC verifiers force attackers to guess the entire digest on each attempt.
+Just like an attacker trying to solve HMAC digests can work on one character at a time, a lock pick can work on each pin in isolation. To protect against this, quality locks force all pins to be made fixed into place before the cylinder rotation can begin just as secure HMAC verifiers force attackers to guess the entire digest on each attempt.
 
 
 
