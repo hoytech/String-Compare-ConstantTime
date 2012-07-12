@@ -5,6 +5,9 @@ lib/String/Compare/ConstantTime.pm
 Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
-t/accuracy.t
-t/stats.t
+MYMETA.json
+MYMETA.yml
 README
+t/accuracy.t
+t/lib/ministat.pl
+t/stats.t
