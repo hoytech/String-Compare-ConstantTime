@@ -7,15 +7,14 @@ String::Compare::ConstantTime - Timing side-channel protected string compare
 
 =head1 SYNOPSIS
 
+    use String::Compare::ConstantTime;
     use Digest::HMAC_SHA1; ## or whatever
 
     my $hmac_ctx = Digest::HMAC_SHA1->new($key);
     $hmac_ctx->add($data);
-    my $digest = $hmac->digest;
+    my $digest = $hmac_ctx->digest;
 
-    use String::Compare::ConstantTime qw/equals/;
-
-    if (equals($digest, $candidate_digest)) {
+    if (String::Compare::ConstantTime::equals($digest, $candidate_digest)) {
       ## The candidate digest is valid
     }
 
@@ -23,11 +22,11 @@ String::Compare::ConstantTime - Timing side-channel protected string compare
 
 =head1 DESCRIPTION
 
-This modules provides one function, C<equals> (not exported by default).
+This module provides one function, C<equals> (not exported by default).
 
-You should pass this function two strings of the same length. It will return true if they are string-wise equal (like C<eq>) and false otherwise. Unlike C<eq>, neither string's contents will affect the time it takes for this function to return.
+You should pass this function two strings of the same length. It will return true if they are string-wise identical and false otherwise, just like C<eq>. However, comparing any two differing strings will take a fixed amount of time, unlike C<eq>.
 
-B<NOTE>: If the lengths of the strings are different, C<equals> will return false right away.
+B<NOTE>: If the lengths of the strings are different, C<equals> will return false right away. Also, comparing two identical strings will take a different amount of time than comparing two differing strings.
 
 
 
@@ -35,7 +34,7 @@ B<NOTE>: If the lengths of the strings are different, C<equals> will return fals
 
 Some programs take different amounts of time to run depending on the input values provided to them. When untrusted parties control input, they might be able to learn information you might otherwise not want them to know. This is called a "timing side-channel".
 
-Most routines that compare strings (like perl's C<eq> and C<cmp> and C's C<strcmp> and C<memcmp>) start scanning from the start and terminate as soon as they determine the strings won't match. This is good for efficiency but bad because it opens a timing side-channel. If one of the strings being compared is a secret and the other is provided by some untrusted party, it is sometimes possible for this untrusted party to learn the secret using a timing side-channel.
+Most routines that compare strings (like perl's C<eq> and C<cmp> and C's C<strcmp> and C<memcmp>) start scanning from the start and terminate as soon as they determine the strings won't match. This is good for efficiency but bad because it opens a timing side-channel. If one of the strings being compared is a secret and the other is controlled by some untrusted party, it is sometimes possible for this untrusted party to learn the secret using a timing side-channel.
 
 
 
@@ -59,7 +58,7 @@ Pin tumbler locks are susceptible to being picked in a similar way to an attacke
 
 The most common way to pick cheap pin tumbler locks is to apply torque to the lock cylinder so that the pins are pressed against the cylinder. However, because of slight manufacturing discrepancies one particular pin will be the widest by a slight margin and will actually be the only pin pressed against the cylinder (the cheaper the lock, the higher the manufacturing "tolerances"). The attacker lifts this pin until the cylinder gives a little bit, indicating that this pin has been solved and the next widest pin is now the one being pressed against the cylinder. This process is repeated until all the pins are solved and the lock opens.
 
-Just like an attacker trying to solve HMAC digests can work on one character at a time, a lock pick can work on each pin in isolation. To protect against this, quality locks force all pins to be made fixed into place before the cylinder rotation can begin just as secure HMAC verifiers force attackers to guess the entire digest on each attempt.
+Just like an attacker trying to solve HMAC digests can work on one character at a time, a lock pick can work on each pin in isolation. To protect against this, quality locks force all pins to be fixed into place before the cylinder rotation can begin just as secure HMAC verifiers force attackers to guess the entire digest on each attempt.
 
 
 
@@ -86,11 +85,17 @@ L<NaCl: Crypto library designed to prevent side channel attacks|http://nacl.cr.y
 
 Doug Hoyte, C<< <doug@hcsw.org> >>
 
+
+
 =head1 COPYRIGHT & LICENSE
 
 Copyright 2012 Doug Hoyte.
 
 This module is licensed under the same terms as perl itself.
+
+The C<ministat.pl> program is included for use by the test suite. It is copyright Nik Clayton and Poul-Henning Kamp.
+
+C<ministat.pl> is licensed under the "Beer-Ware License" (see the source code).
 
 
 =cut

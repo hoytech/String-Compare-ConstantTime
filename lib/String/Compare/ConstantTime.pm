@@ -28,15 +28,14 @@ String::Compare::ConstantTime - Timing side-channel protected string compare
 
 =head1 SYNOPSIS
 
+    use String::Compare::ConstantTime;
     use Digest::HMAC_SHA1; ## or whatever
 
     my $hmac_ctx = Digest::HMAC_SHA1->new($key);
     $hmac_ctx->add($data);
-    my $digest = $hmac->digest;
+    my $digest = $hmac_ctx->digest;
 
-    use String::Compare::ConstantTime qw/equals/;
-
-    if (equals($digest, $candidate_digest)) {
+    if (String::Compare::ConstantTime::equals($digest, $candidate_digest)) {
       ## The candidate digest is valid
     }
 
@@ -44,11 +43,11 @@ String::Compare::ConstantTime - Timing side-channel protected string compare
 
 =head1 DESCRIPTION
 
-This modules provides one function, C<equals> (not exported by default).
+This module provides one function, C<equals> (not exported by default).
 
-You should pass this function two strings of the same length. It will return true if they are string-wise equal (like C<eq>) and false otherwise. Unlike C<eq>, neither string's contents will affect the time it takes for this function to return.
+You should pass this function two strings of the same length. It will return true if they are string-wise identical and false otherwise, just like C<eq>. However, comparing any two differing strings will take a fixed amount of time, unlike C<eq>.
 
-B<NOTE>: If the lengths of the strings are different, C<equals> will return false right away.
+B<NOTE>: If the lengths of the strings are different, C<equals> will return false right away. Also, comparing two identical strings will take a different amount of time than comparing two differing strings.
 
 
 
@@ -107,20 +106,16 @@ L<NaCl: Crypto library designed to prevent side channel attacks|http://nacl.cr.y
 
 Doug Hoyte, C<< <doug@hcsw.org> >>
 
+
+
 =head1 COPYRIGHT & LICENSE
 
 Copyright 2012 Doug Hoyte.
 
 This module is licensed under the same terms as perl itself.
 
+The C<ministat.pl> program is included for use by the test suite. It is copyright Nik Clayton and Poul-Henning Kamp.
+
+C<ministat.pl> is licensed under the "Beer-Ware License" (see the source code).
+
 =cut
-
-
-
-
-
-__END__
-
-TODO:
-
-* Finish stats.t
