@@ -2,56 +2,64 @@ use String::Compare::ConstantTime qw/equals/;
 
 use strict;
 
+use FindBin;
 use Time::HiRes qw/time/;
+use File::Temp;
 
-use Test::More skip_all => 1;
-
-
-__END__
-
-FIXME: finish test
+use Test::More tests => 2;
 
 
-my $f1 = sub {
+my $data_points = 25;
+my $iters = 20;
+my $confidence = 95;
+
+
+my $ministat_bin = "$FindBin::Bin/lib/ministat.pl";
+
+
+
+my $cmp_constanttime = sub {
   my ($i1, $i2) = @_;
   return equals($i1, $i2);
 };
 
-my $f2 = sub {
+my $cmp_perl_eq = sub {
   my ($i1, $i2) = @_;
   return $i1 eq $i2;
 };
 
 
-my $s1 = "a"x1000;
-my $s2 = "a"x1000;
-my $s3 = "b" . "a"x999;
-my $s4 = "a"x99 . "b";
-my $s5 = "a"x19 . "b" . "a"x80;
-
-
-my ($z1, $z2) = gen_timing_data($f2, $s1, $s2, $s3);
-
-my $ttest = new Statistics::TTest;  
-$ttest->set_significance(95);
-$ttest->load_data($z1,$z2);  
-$ttest->output_t_test();   
-$ttest->print_t_test();
-
-
-open(my $fh, '>', 'r1');
-print $fh join("\n", @$z1) . "\n";
-close($fh);
-
-open($fh, '>', 'r2');
-print $fh join("\n", @$z2) . "\n";
-close($fh);
+ok(!is_difference_detected($cmp_constanttime, "a"x1000, "a"x999 . "b", "b" . "a"x999), 'no difference detected with constanttime');
+ok(is_difference_detected($cmp_perl_eq, "a"x1000, "a"x999 . "b", "b" . "a"x999), 'detected difference with perl eq');
 
 
 
+sub is_difference_detected {
+  my ($data1, $data2) = gen_timing_data(@_);
 
+  my ($fh1, $filename1) = File::Temp::tempfile();
+  my ($fh2, $filename2) = File::Temp::tempfile();
 
-ok(1);
+  print $fh1 "$_\n" for @$data1;
+  print $fh2 "$_\n" for @$data2;
+
+  close($fh1);
+  close($fh2);
+
+  my $ministat_output = `$ministat_bin -c $confidence $filename1 $filename2`;
+
+  unlink($filename1);
+  unlink($filename2);
+
+  if ($ministat_output =~ /No difference proven/) {
+    return 0;
+  } elsif ($ministat_output =~ /Difference at/) {
+    return 1;
+  } else {
+    die "couldn't parse ministat output";
+  }
+}
+
 
 
 sub gen_timing_data {
@@ -62,18 +70,18 @@ sub gen_timing_data {
   my @r1 = ();
   my @r2 = ();
 
-  for (1..1000) {
+  for (1..$data_points) {
     my ($start, $end);
 
     $start = time;
-    for (1..20) {
+    for (1..$iters) {
       $junk = $cb->($i1, $i2);
     }
     $end = time;
     push @r1, $end - $start;
 
     $start = time;
-    for (1..20) {
+    for (1..$iters) {
       $junk = $cb->($i1, $i3);
     }
     $end = time;

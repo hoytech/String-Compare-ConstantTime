@@ -56,7 +56,7 @@ B<NOTE>: If the lengths of the strings are different, C<equals> will return fals
 
 Some programs take different amounts of time to run depending on the input values provided to them. When untrusted parties control input, they might be able to learn information you might otherwise not want them to know. This is called a "timing side-channel".
 
-Most routines that compare strings (like perl's C<eq> and C<cmp> and C's C<strcmp> and C<memcmp>) start scanning from the start and terminate as soon as they determine the strings won't match. This is good for efficiency but bad because it opens a timing side-channel. If one of the strings being compared is a secret and the other is provided by some untrusted party, it is sometimes possible for this untrusted party to learn the secret using a timing side-channel.
+Most routines that compare strings (like perl's C<eq> and C<cmp> and C's C<strcmp> and C<memcmp>) start scanning from the start and terminate as soon as they determine the strings won't match. This is good for efficiency but bad because it opens a timing side-channel. If one of the strings being compared is a secret and the other is controlled by some untrusted party, it is sometimes possible for this untrusted party to learn the secret using a timing side-channel.
 
 
 
@@ -80,7 +80,7 @@ Pin tumbler locks are susceptible to being picked in a similar way to an attacke
 
 The most common way to pick cheap pin tumbler locks is to apply torque to the lock cylinder so that the pins are pressed against the cylinder. However, because of slight manufacturing discrepancies one particular pin will be the widest by a slight margin and will actually be the only pin pressed against the cylinder (the cheaper the lock, the higher the manufacturing "tolerances"). The attacker lifts this pin until the cylinder gives a little bit, indicating that this pin has been solved and the next widest pin is now the one being pressed against the cylinder. This process is repeated until all the pins are solved and the lock opens.
 
-Just like an attacker trying to solve HMAC digests can work on one character at a time, a lock pick can work on each pin in isolation. To protect against this, quality locks force all pins to be made fixed into place before the cylinder rotation can begin just as secure HMAC verifiers force attackers to guess the entire digest on each attempt.
+Just like an attacker trying to solve HMAC digests can work on one character at a time, a lock pick can work on each pin in isolation. To protect against this, quality locks force all pins to be fixed into place before the cylinder rotation can begin just as secure HMAC verifiers force attackers to guess the entire digest on each attempt.
 
 
 
