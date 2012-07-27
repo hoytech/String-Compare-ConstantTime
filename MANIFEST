@@ -9,5 +9,4 @@ MYMETA.json
 MYMETA.yml
 README
 t/accuracy.t
-t/lib/ministat.pl
 t/stats.t

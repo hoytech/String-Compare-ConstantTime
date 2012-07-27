@@ -2,19 +2,15 @@ use String::Compare::ConstantTime qw/equals/;
 
 use strict;
 
-use FindBin;
 use Time::HiRes qw/time/;
-use File::Temp;
+use Statistics::BoxTest;
+use Data::Dumper;
 
 use Test::More tests => 2;
 
 
-my $data_points = 25;
-my $iters = 20;
-my $confidence = 95;
+my $data_points = 500;
 
-
-my $ministat_bin = "$FindBin::Bin/lib/ministat.pl";
 
 
 
@@ -29,35 +25,40 @@ my $cmp_perl_eq = sub {
 };
 
 
-ok(!is_difference_detected($cmp_constanttime, "a"x1000, "a"x999 . "b", "b" . "a"x999), 'no difference detected with constanttime');
-ok(is_difference_detected($cmp_perl_eq, "a"x1000, "a"x999 . "b", "b" . "a"x999), 'detected difference with perl eq');
+my $all_a = "a"x1000;
+my $last_is_b = "a"x999 . "b";
+my $first_is_b = "b" . "a"x999;
+
+
+## Warm up caches
+for (1..2) {
+  gen_timing_data($cmp_constanttime, $all_a, $last_is_b, $first_is_b);
+}
+
+ok(!is_difference_detected($cmp_constanttime, $all_a, $last_is_b, $first_is_b), 'no difference detected with constanttime');
+
+
+## Warm up caches
+for (1..2) {
+  gen_timing_data($cmp_perl_eq, $all_a, $last_is_b, $first_is_b);
+}
+
+ok(1 == is_difference_detected($cmp_perl_eq, $all_a, $last_is_b, $first_is_b), 'detected difference with perl eq');
 
 
 
 sub is_difference_detected {
   my ($data1, $data2) = gen_timing_data(@_);
 
-  my ($fh1, $filename1) = File::Temp::tempfile();
-  my ($fh2, $filename2) = File::Temp::tempfile();
+  my ($r, $summary) = Statistics::BoxTest::compare(
+                        dataset1 => $data1,
+                        dataset2 => $data2,
+                      );
 
-  print $fh1 "$_\n" for @$data1;
-  print $fh2 "$_\n" for @$data2;
+  diag("RESULT: $r");
+  diag("SUMMARY: " . Dumper($summary));
 
-  close($fh1);
-  close($fh2);
-
-  my $ministat_output = `$ministat_bin -c $confidence $filename1 $filename2`;
-
-  unlink($filename1);
-  unlink($filename2);
-
-  if ($ministat_output =~ /No difference proven/) {
-    return 0;
-  } elsif ($ministat_output =~ /Difference at/) {
-    return 1;
-  } else {
-    die "couldn't parse ministat output";
-  }
+  return $r;
 }
 
 
@@ -74,16 +75,12 @@ sub gen_timing_data {
     my ($start, $end);
 
     $start = time;
-    for (1..$iters) {
-      $junk = $cb->($i1, $i2);
-    }
+    $junk = $cb->($i1, $i2);
     $end = time;
     push @r1, $end - $start;
 
     $start = time;
-    for (1..$iters) {
-      $junk = $cb->($i1, $i3);
-    }
+    $junk = $cb->($i1, $i3);
     $end = time;
     push @r2, $end - $start;
 
