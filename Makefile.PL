@@ -10,8 +10,6 @@ WriteMakefile(
     NAME              => 'String::Compare::ConstantTime',
     VERSION_FROM      => 'lib/String/Compare/ConstantTime.pm',
     PREREQ_PM         => {
-                           'Time::HiRes' => 0,
-                           'Statistics::BoxTest' => 0,
                          },
     LIBS              => [''],
     DEFINE            => '',
