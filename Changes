@@ -1,2 +1,6 @@
+0.300  2012-10-09
+  * Change version number format
+  * Skip unreliable stats test for now
+
 0.20   2012-07-12
   * Initial release
