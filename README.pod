@@ -60,7 +60,7 @@ At this point, you keep this first character fixed and start varying the second 
 
 Note that this particular attack doesn't allow the attacker to recover the secret input key to the HMAC, but nevertheless can produce a valid digest for any message given enough time.
 
-B<NOTE>: Although this module protects against a common attack, it is in no way endorsement for the stateless storage of sessions in browser cookies and such.
+B<NOTE>: Although this module protects against a common attack, it is in no way an endorsement for the stateless storage of sessions in browser cookies and such.
 
 
 
