@@ -53,17 +53,15 @@ An example with HMACs:
 
 This module provides one function, C<equals> (not exported by default).
 
-You should pass this function two strings of the same length. It will return true if they are string-wise identical and false otherwise, just like C<eq>. However, comparing any two differing strings will take a fixed amount of time, unlike C<eq>.
-
-If the lengths of the strings are different, C<equals> will return false right away.
+You should pass this function two strings of the same length. Just like perl's <eq>, it will return true if they are string-wise identical and false otherwise. However, comparing any two differing strings of the same length will take a fixed amount of time. If the lengths of the strings are different, C<equals> will return false right away.
 
 
 
 =head1 TIMING SIDE-CHANNEL
 
-Some programs take different amounts of time to run depending on the input values provided to them. When untrusted parties control input, they might be able to learn information you might otherwise not want them to know. This is called a "timing side-channel".
+Some programs take different amounts of time to run depending on the input values provided to them. Untrusted parties can sometimes learn information you might not want them to know by measuring this time. This is called a "timing side-channel".
 
-Most routines that compare strings (like perl's C<eq> and C<cmp> and C's C<strcmp> and C<memcmp>) start scanning from the start and terminate as soon as they determine the strings won't match. This is good for efficiency but bad because it opens a timing side-channel. If one of the strings being compared is a secret and the other is controlled by some untrusted party, it is sometimes possible for this untrusted party to learn the secret using a timing side-channel.
+Most routines that compare strings (like perl's C<eq> and C<cmp> and C's C<strcmp> and C<memcmp>) start scanning from the start of the strings and terminate as soon as they determine the strings won't match. This is good for efficiency but bad because it opens a timing side-channel. If one of the strings being compared is a secret and the other is controlled by some untrusted party, it is sometimes possible for this untrusted party to learn the secret using a timing side-channel.
 
 If the lengths of the strings are different, because C<equals> returns false right away the size of the secret string may be leaked (but not its contents).
 
@@ -75,13 +73,13 @@ HMACs are "Message Authentication Codes" built on top of cryptographic hashes. T
 
 To verify a candidate digest included with a message, you re-compute the digest using the message and the secret password. If this computed digest is is the same as the candidate digest then the message is considered authenticated.
 
-A common side-channel attack against services that verify unlimited numbers of messages automatically is to create a forged message and then just send some random junk as the candidate digest. Continue sending this message and the junk digest, varying the first character in the digest. Repeat many times. If you find a particular digest that statistically takes a longer time to be rejected than the other digests, it is probably because this particular digest has the first character correct and the service's final string comparison is running a little longer.
+A common side-channel attack against services that verify unlimited numbers of messages automatically is to create a forged message and then just send some random junk as the candidate digest. Continue sending this message and junk digests that vary by the first character. Repeat many times. If you find a particular digest that statistically takes a longer time to be rejected than the other digests, it is probably because this particular digest has the first character correct and the service's final string comparison is running slightly longer.
 
-At this point, you keep this first character fixed and start varying the second character. Repeat until all the characters are solved or until the amount of remaining possibilities are so small you can brute force it. At this point, your candidate digest is considered valid and you have forged a message.
+At this point, you keep this first character fixed and start varying the second character until it is solved. Repeat until all the characters are solved or until the amount of remaining possibilities are so small you can brute force it. At this point, your candidate digest is considered valid and you have forged a message.
 
-Note that this particular attack doesn't allow the attacker to recover the secret input key to the HMAC, but nevertheless can produce a valid digest for any message given enough time.
+Note that this particular attack doesn't allow the attacker to recover the secret input key to the HMAC but nevertheless can produce a valid digest for any message given enough time.
 
-B<NOTE>: Although this module protects against a common attack, it is in no way an endorsement for the stateless storage of sessions in browser cookies and such.
+B<NOTE>: Although this module protects against a common attack against applications that store state in browser cookies, it is in no way an endorsement of this practise.
 
 
 
@@ -122,7 +120,7 @@ Doug Hoyte, C<< <doug@hcsw.org> >>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2012 Doug Hoyte.
+Copyright 2012-2013 Doug Hoyte.
 
 This module is licensed under the same terms as perl itself.
 
