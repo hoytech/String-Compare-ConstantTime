@@ -17,14 +17,11 @@ our @EXPORT_OK = qw(equals);
 
 __END__
 
-
-
 =encoding utf-8
 
 =head1 NAME
- 
+
 String::Compare::ConstantTime - Timing side-channel protected string compare
- 
 
 =head1 SYNOPSIS
 
