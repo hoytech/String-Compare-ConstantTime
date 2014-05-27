@@ -2,10 +2,6 @@ use strict;
 
 use ExtUtils::MakeMaker;
 
-my $preop =
-    'perldoc -uT $(VERSION_FROM) | tee $(DISTVNAME)/README.pod > README.pod;' .
-    'pod2text README.pod | tee $(DISTVNAME)/README > README';
-
 my %args = (
     NAME              => 'String::Compare::ConstantTime',
     VERSION_FROM      => 'lib/String/Compare/ConstantTime.pm',
@@ -17,7 +13,7 @@ my %args = (
     OBJECT            => 'ConstantTime.o',
     LICENSE           => 'perl',
     dist => {
-      PREOP => $preop,
+      PREOP => 'pod2text $(VERSION_FROM) > $(DISTVNAME)/README',
     },
 );
 
