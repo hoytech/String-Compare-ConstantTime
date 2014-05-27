@@ -50,7 +50,7 @@ An example with HMACs:
 
 This module provides one function, C<equals> (not exported by default).
 
-You should pass this function two strings of the same length. Just like perl's <eq>, it will return true if they are string-wise identical and false otherwise. However, comparing any two differing strings of the same length will take a fixed amount of time. If the lengths of the strings are different, C<equals> will return false right away.
+You should pass this function two strings of the same length. Just like perl's C<eq>, it will return true if they are string-wise identical and false otherwise. However, comparing any two differing strings of the same length will take a fixed amount of time. If the lengths of the strings are different, C<equals> will return false right away.
 
 
 
