@@ -4,7 +4,7 @@ use strict;
 
 use utf8;
 
-use Test::More tests => 15;
+use Test::More tests => 18;
 
 
 ok(equals("asdf", "asdf"));
@@ -28,3 +28,7 @@ ok(equals("λλλλλλλ", "λλλλλλλ"));
 
 ok(equals(join("", ( map { chr } (0 .. 255) )) x 10,
            join("", ( map { chr } (0 .. 255) )) x 10));
+
+ok(!equals("asdf", undef));
+ok(!equals(undef, "asdf"));
+ok(equals(undef, undef));
