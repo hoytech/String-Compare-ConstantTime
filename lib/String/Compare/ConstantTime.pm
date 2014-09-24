@@ -74,7 +74,7 @@ A common side-channel attack against services that verify unlimited numbers of m
 
 At this point, you keep this first character fixed and start varying the second character until it is solved. Repeat until all the characters are solved or until the amount of remaining possibilities are so small you can brute force it. At this point, your candidate digest is considered valid and you have forged a message.
 
-Note that this particular attack doesn't allow the attacker to recover the secret input key to the HMAC but nevertheless can produce a valid digest for any message given enough time.
+Note that this particular attack doesn't allow the attacker to recover the secret input key to the HMAC but nevertheless can produce a valid digest for any message given enough time because the service that validates the HMAC is acting as an "oracle".
 
 B<NOTE>: Although this module protects against a common attack against applications that store state in browser cookies, it is in no way an endorsement of this practise.
 
@@ -84,7 +84,7 @@ B<NOTE>: Although this module protects against a common attack against applicati
 
 Pin tumbler locks are susceptible to being picked in a similar way to an attacker forging HMAC digests using a timing side-channel.
 
-The traditional way to pick cheap pin tumbler locks is to apply torque to the lock cylinder so that the pins are pressed against the cylinder. However, because of slight manufacturing discrepancies one particular pin will be the widest by a slight margin and will actually be the only pin pressed against the cylinder (the cheaper the lock, the higher the manufacturing tolerances). The attacker lifts this pin until the cylinder gives a little bit, indicating that this pin has been solved and the next widest pin is now the one being pressed against the cylinder. This process is repeated until all the pins are solved and the lock opens.
+The traditional way to pick cheap pin tumbler locks is to apply torque to the lock cylinder so that the pins are pressed against the cylinder. However, because of slight manufacturing discrepancies one particular pin will be the widest by a slight margin and will be pressed against the cylinder tighter than the others (the cheaper the lock, the higher the manufacturing tolerances). The attacker lifts this pin until the cylinder gives a little bit, indicating that this pin has been solved and the next widest pin is now the one being pressed against the cylinder the tighest. This process is repeated until all the pins are solved and the lock opens.
 
 Just like an attacker trying to solve HMAC digests can work on one character at a time, a lock pick can work on each pin in isolation. To protect against this, quality locks force all pins to be fixed into place before the cylinder rotation can be attempted, just as secure HMAC verifiers force attackers to guess the entire digest on each attempt.
 
@@ -95,7 +95,7 @@ Just like an attacker trying to solve HMAC digests can work on one character at 
 
 L<The String-Compare-ConstantTime github repo|https://github.com/hoytech/String-Compare-ConstantTime>
 
-L<Authen::Passphrase> has a good section on side-channel cryptanalysis such as it pertains to password storage.
+L<Authen::Passphrase> has a good section on side-channel cryptanalysis such as it pertains to password storage (mostly, it doesn't).
 
 L<The famous TENEX password bug|http://www.meadhbh.org/services/passwords>
 
