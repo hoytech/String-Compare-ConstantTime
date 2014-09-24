@@ -34,16 +34,22 @@ equals(a, b)
         unsigned char *bp;
         int r;
 
-        alen = SvCUR(a);
-        ap = SvPV(a, alen);
+        if (SvOK(a) && SvOK(b)) {
+          alen = SvCUR(a);
+          ap = SvPV(a, alen);
 
-        blen = SvCUR(b);
-        bp = SvPV(b, blen);
+          blen = SvCUR(b);
+          bp = SvPV(b, blen);
 
-        if (alen == blen) {
-          r = !do_compare(ap, bp, alen);
-        } else {
+          if (alen == blen) {
+            r = !do_compare(ap, bp, alen);
+          } else {
+            r = 0;
+          }
+        } else if (SvOK(a) || SvOK(b)) {
           r = 0;
+        } else {
+          r = 1;
         }
 
         RETVAL = r;
