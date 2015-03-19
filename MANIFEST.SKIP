@@ -10,3 +10,4 @@ ConstantTime.o
 ConstantTime.c
 ConstantTime.bs
 String-Compare-ConstantTime-*.tar.gz
+MYMETA.*
