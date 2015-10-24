@@ -1,3 +1,7 @@
+0.311  2015-10-24
+  * Don't ship MYMETA files anymore (thanks Adel Qalieh
+    and Alexandr Ciornii)
+
 0.310  2014-09-23
   * Fix segfault when passed in undef (thanks Ichinose Shogo)
   * Documentation updates
