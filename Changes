@@ -1,3 +1,7 @@
+0.312  2017-02-14
+  * Now works with variables that have magic such as results of
+    substr, tied variables, etc. (thanks James Raspass)
+
 0.311  2015-10-24
   * Don't ship MYMETA files anymore (thanks Adel Qalieh
     and Alexandr Ciornii)
