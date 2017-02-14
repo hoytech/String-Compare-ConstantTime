@@ -34,6 +34,9 @@ equals(a, b)
         unsigned char *bp;
         int r;
 
+        SvGETMAGIC(a);
+        SvGETMAGIC(b);
+
         if (SvOK(a) && SvOK(b)) {
           alen = SvCUR(a);
           ap = SvPV(a, alen);
