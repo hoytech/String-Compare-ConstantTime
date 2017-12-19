@@ -1,6 +1,7 @@
-use String::Compare::ConstantTime qw/equals/;
-
 use strict;
+use warnings;
+
+use String::Compare::ConstantTime qw/equals/;
 
 use utf8;
 
