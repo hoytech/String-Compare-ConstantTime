@@ -1,6 +1,7 @@
 package String::Compare::ConstantTime;
 
 use strict;
+use warnings;
 
 our $VERSION = '0.312';
 
