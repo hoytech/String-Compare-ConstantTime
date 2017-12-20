@@ -17,8 +17,7 @@ my %args = (
     },
 );
 
-my $eummv = eval ($ExtUtils::MakeMaker::VERSION);
-if ($eummv >= 6.45) {
+if ($ExtUtils::MakeMaker::VERSION >= 6.45) {
     $args{META_MERGE} = {
         resources => {
             repository => 'git://github.com/hoytech/String-Compare-ConstantTime.git',
