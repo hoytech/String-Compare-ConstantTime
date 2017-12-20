@@ -8,9 +8,6 @@ my %args = (
     VERSION_FROM      => 'lib/String/Compare/ConstantTime.pm',
     PREREQ_PM         => {
                          },
-    LIBS              => [''],
-    DEFINE            => '',
-    INC               => '-I.',
     OBJECT            => 'ConstantTime.o',
     LICENSE           => 'perl',
     dist => {
