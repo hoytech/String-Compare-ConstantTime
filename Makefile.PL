@@ -5,6 +5,7 @@ use ExtUtils::MakeMaker;
 
 my %args = (
     NAME              => 'String::Compare::ConstantTime',
+    AUTHOR            => ['Doug Hoyte <doug@hcsw.org>'],
     VERSION_FROM      => 'lib/String/Compare/ConstantTime.pm',
     PREREQ_PM         => {
                          },
