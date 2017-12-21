@@ -98,7 +98,7 @@ L<The String-Compare-ConstantTime github repo|https://github.com/hoytech/String-
 
 L<Authen::Passphrase> has a good section on side-channel cryptanalysis such as it pertains to password storage (mostly, it doesn't).
 
-L<The famous TENEX password bug|http://www.meadhbh.org/services/passwords>
+L<The famous TENEX password bug|https://web.archive.org/web/20150913074712/http://www.meadhbh.org/services/passwords>
 
 L<Example of a timing bug|http://rdist.root.org/2009/05/28/timing-attack-in-google-keyczar-library/>
 
