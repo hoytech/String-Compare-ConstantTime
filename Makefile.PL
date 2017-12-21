@@ -5,12 +5,11 @@ use ExtUtils::MakeMaker;
 
 my %args = (
     NAME              => 'String::Compare::ConstantTime',
+    AUTHOR            => ['Doug Hoyte <doug@hcsw.org>'],
+    ABSTRACT_FROM     => 'lib/String/Compare/ConstantTime.pm',
     VERSION_FROM      => 'lib/String/Compare/ConstantTime.pm',
     PREREQ_PM         => {
                          },
-    LIBS              => [''],
-    DEFINE            => '',
-    INC               => '-I.',
     OBJECT            => 'ConstantTime.o',
     LICENSE           => 'perl',
     dist => {
@@ -18,14 +17,14 @@ my %args = (
     },
 );
 
-my $eummv = eval ($ExtUtils::MakeMaker::VERSION);
-if ($eummv >= 6.45) {
+if ($ExtUtils::MakeMaker::VERSION >= 6.48) {
     $args{META_MERGE} = {
         resources => {
             repository => 'git://github.com/hoytech/String-Compare-ConstantTime.git',
             bugtracker => 'https://github.com/hoytech/String-Compare-ConstantTime/issues',
         },
     };
+    $args{MIN_PERL_VERSION} = 5.8.0;
 }
 
 WriteMakefile(%args);
