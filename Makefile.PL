@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use ExtUtils::MakeMaker;
+use ExtUtils::MakeMaker qw(6.48);
 
 my %args = (
     NAME              => 'String::Compare::ConstantTime',
@@ -15,16 +15,13 @@ my %args = (
     dist => {
       PREOP => 'pod2text $(VERSION_FROM) > $(DISTVNAME)/README',
     },
-);
-
-if ($ExtUtils::MakeMaker::VERSION >= 6.48) {
-    $args{META_MERGE} = {
+    META_MERGE => {
         resources => {
             repository => 'git://github.com/hoytech/String-Compare-ConstantTime.git',
             bugtracker => 'https://github.com/hoytech/String-Compare-ConstantTime/issues',
         },
-    };
-    $args{MIN_PERL_VERSION} = 5.8.0;
-}
+    },
+    MIN_PERL_VERSION => 5.8.0,
+);
 
 WriteMakefile(%args);
