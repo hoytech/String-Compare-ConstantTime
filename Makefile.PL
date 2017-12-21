@@ -17,13 +17,14 @@ my %args = (
     },
 );
 
-if ($ExtUtils::MakeMaker::VERSION >= 6.45) {
+if ($ExtUtils::MakeMaker::VERSION >= 6.48) {
     $args{META_MERGE} = {
         resources => {
             repository => 'git://github.com/hoytech/String-Compare-ConstantTime.git',
             bugtracker => 'https://github.com/hoytech/String-Compare-ConstantTime/issues',
         },
     };
+    $args{MIN_PERL_VERSION} = 5.8.0;
 }
 
 WriteMakefile(%args);
