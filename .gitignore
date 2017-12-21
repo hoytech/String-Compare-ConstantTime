@@ -9,3 +9,7 @@ ConstantTime.bs
 ConstantTime.c
 ConstantTime.o
 MANIFEST.bak
+cover_db/
+*.gcov
+*.gcno
+*.gcda
