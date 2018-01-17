@@ -38,10 +38,10 @@ equals(a, b)
         SvGETMAGIC(b);
 
         if (SvOK(a) && SvOK(b)) {
-          alen = SvCUR(a);
+          alen = sv_len_utf8(a);
           ap = SvPV(a, alen);
 
-          blen = SvCUR(b);
+          blen = sv_len_utf8(b);
           bp = SvPV(b, blen);
 
           if (alen == blen) {
