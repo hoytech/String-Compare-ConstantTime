@@ -118,7 +118,9 @@ Doug Hoyte, C<< <doug@hcsw.org> >>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2012-2017 Doug Hoyte.
+Copyright 2012-2018 Doug Hoyte.
+
+Contributions from Paul Cochrane.
 
 This module is licensed under the same terms as perl itself.
 
