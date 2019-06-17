@@ -3,7 +3,7 @@ package String::Compare::ConstantTime;
 use strict;
 use warnings;
 
-our $VERSION = '0.320';
+our $VERSION = '0.321';
 
 require XSLoader;
 XSLoader::load('String::Compare::ConstantTime', $VERSION);
